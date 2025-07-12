@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Split-Flap Display</title>
+  <style>
+    body {
+      background: #222;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    /* Container for the display */
+    #display {
+      display: flex;
+    }
+    /* Each letter in the split-flap display */
+    .split-flap {
+      position: relative;
+      width: 50px;
+      height: 70px;
+      margin: 0 5px;
+      background: #333;
+      color: #fff;
+      font-size: 48px;
+      font-family: 'Courier New', Courier, monospace;
+      text-align: center;
+      line-height: 70px;
+      perspective: 600px;
+    }
+    /* Front face of the flap */
+    .flap {
+      display: block;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+    /* Animation for flipping */
+    .flip {
+      animation: flip 0.6s ease-out forwards;
+    }
+    @keyframes flip {
+      0% {
+        transform: rotateX(0deg);
+      }
+      50% {
+        transform: rotateX(90deg);
+      }
+      100% {
+        transform: rotateX(0deg);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="display"></div>
+
+  <script>
+    const targetText = "HELLO";
+    const display = document.getElementById('display');
+    const flaps = [];
+
+    // Create a flap element for each character
+    for (let i = 0; i < targetText.length; i++) {
+      const flapContainer = document.createElement('div');
+      flapContainer.classList.add('split-flap');
+      
+      // Create an inner element that will flip
+      const flap = document.createElement('span');
+      flap.classList.add('flap');
+      flap.textContent = ' '; // start with blank
+      flapContainer.appendChild(flap);
+      
+      display.appendChild(flapContainer);
+      flaps.push(flap);
+    }
+
+    // Utility to get a random character (A-Z or space)
+    function getRandomChar() {
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ ';
+      return chars[Math.floor(Math.random() * chars.length)];
+    }
+
+    // Animate a single flap from random characters to the target letter
+    function animateFlap(flap, targetLetter, index) {
+      let iterations = 0;
+      const interval = setInterval(() => {
+        iterations++;
+        // Change letter to a random char for a few iterations
+        flap.textContent = getRandomChar();
+        flap.classList.add('flip');
+        // Remove flip class after animation ends to allow re-triggering
+        setTimeout(() => flap.classList.remove('flip'), 600);
+        if (iterations > 10) { // after enough iterations, reveal target letter
+          clearInterval(interval);
+          flap.textContent = targetLetter;
+        }
+      }, 100 + index * 50); // slight delay per letter for a cascading effect
+    }
+
+    // Animate all flaps
+    flaps.forEach((flap, i) => {
+      animateFlap(flap, targetText[i], i);
+    });
+  </script>
+</body>
+</html>

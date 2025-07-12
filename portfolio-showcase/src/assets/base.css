@@ -1,0 +1,14 @@
+/* assets/base.css or assets/main.css */
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+@font-face {
+  font-family: 'Visuelt Pro';
+  src: url('./fonts/VisueltPro-Bold.ttf') format('truetype'),
+       url('./fonts/Visuel-pro.ttf') format('truetype');
+}
+
+/* Apply the fonts globally */
+body {
+  font-family: 'Visuelt Pro', 'Roboto', sans-serif;
+}
